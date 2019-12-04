@@ -13,7 +13,7 @@ jobs:
       - name: Setup system repositories
         run: |
           sudo apt update
-          sudo apt dist-upgrade
+          sudo apt upgrade
       - name: Install fonts
         run: |
           echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
