@@ -8,6 +8,8 @@ jobs:
     runs-on: ubuntu-18.04
 
     steps:
+    - name: Print work directory
+      run: pwd
     - name: List directories
       run: ls
     - name: LaTeX compilation
