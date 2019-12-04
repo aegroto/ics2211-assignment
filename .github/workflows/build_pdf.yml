@@ -11,6 +11,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
       - name: Setup system repositories
+        continue-on-error: true
         run: |
           sudo apt update
           sudo apt upgrade
