@@ -8,19 +8,16 @@ jobs:
     runs-on: ubuntu-18.04
 
     steps:
-    - name: Print work directory
-      run: |
-        pwd
-        git status
-        ls
     - name: LaTeX compilation
-      uses: dante-ev/latex-action@v0.2.0
+      uses: |
+        actions/checkout@v1
+        dante-ev/latex-action@v0.2.0
       with:
         # The root LaTeX file to be compiled
         root_file: docs.tex
         # LaTeX engine to be used
         compiler: xelatex
         # Extra arguments to be passed to the latex compiler
-        args: -synctex=1 -interaction=nonstopmode -file-line-error -pdf
+        args: -synctex=1 -interaction=nonstopmode -file-line-error
         # Install extra packages by apt-get
         # extra_system_packages: ttf-mscorefonts-installer
