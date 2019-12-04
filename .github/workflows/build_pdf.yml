@@ -26,3 +26,8 @@ jobs:
           sudo apt install texlive-xetex
       - name: Compilation
         run: xelatex -synctex=1 -interaction=nonstopmode -file-line-error docs.tex
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: docs.pdf
+          path: docs.pdf
