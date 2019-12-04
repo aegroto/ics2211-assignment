@@ -15,8 +15,8 @@ jobs:
         run: |
           sudo apt update
           sudo apt upgrade
-          exit 0 # Ignore errors
       - name: Install fonts
+        continue-on-error: true
         run: |
           echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
           sudo apt install ttf-mscorefonts-installer
