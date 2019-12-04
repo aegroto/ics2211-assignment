@@ -5,7 +5,7 @@ on: [push]
 jobs:
   build:
 
-    runs-on: ubuntu-lts
+    runs-on: ubuntu-18.04
 
     steps:
     - name: LaTeX compilation
