@@ -18,4 +18,4 @@ jobs:
         # Extra arguments to be passed to the latex compiler
         args: -synctex=1 -interaction=nonstopmode -file-line-error -pdf
         # Install extra packages by apt-get
-        extra_system_packages: ttf-mscorefonts-installer
+        # extra_system_packages: ttf-mscorefonts-installer
