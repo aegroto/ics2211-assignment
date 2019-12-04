@@ -1,0 +1,21 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: LaTeX compilation
+      uses: dante-ev/latex-action@v0.2.0
+      with:
+        # The root LaTeX file to be compiled
+        root_file: docs.tex
+        # LaTeX engine to be used
+        compiler: xelatex
+        # Extra arguments to be passed to the latex compiler
+        args: -synctex=1 -interaction=nonstopmode -file-line-error -pdf
+        # Install extra packages by apt-get
+        extra_system_packages: ttf-mscorefonts-installer
