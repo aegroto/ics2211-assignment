@@ -9,9 +9,10 @@ jobs:
 
     steps:
     - name: Print work directory
-      run: pwd
-    - name: List directories
-      run: ls
+      run: |
+        pwd
+        git status
+        ls
     - name: LaTeX compilation
       uses: dante-ev/latex-action@v0.2.0
       with:
