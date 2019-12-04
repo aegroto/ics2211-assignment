@@ -8,10 +8,10 @@ jobs:
     runs-on: ubuntu-18.04
 
     steps:
+    - name: Checkout
+      uses: actions/checkout@v1
     - name: LaTeX compilation
-      uses: |
-        actions/checkout@v1
-        dante-ev/latex-action@v0.2.0
+      uses: dante-ev/latex-action@v0.2.0
       with:
         # The root LaTeX file to be compiled
         root_file: docs.tex
