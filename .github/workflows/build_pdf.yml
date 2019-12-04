@@ -14,14 +14,5 @@ jobs:
       run: |
         echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
         sudo apt-get install ttf-mscorefonts-installer
-    - name: LaTeX compilation
-      uses: dante-ev/latex-action@v0.2.0
-      with:
-        # The root LaTeX file to be compiled
-        root_file: docs.tex
-        # LaTeX engine to be used
-        compiler: xelatex
-        # Extra arguments to be passed to the latex compiler
-        args: -synctex=1 -interaction=nonstopmode -file-line-error
-        # Install extra packages by apt-get
-        # extra_system_packages: ttf-mscorefonts-installer
+    - name: XeLaTeX compile action
+      run: xelatex -synctex=1 -interaction=nonstopmode -file-line-error docs.tex
