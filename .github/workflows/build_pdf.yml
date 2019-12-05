@@ -1,21 +1,36 @@
 name: CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     steps:
-    - name: LaTeX compilation
-      uses: dante-ev/latex-action@v0.2.0
-      with:
-        # The root LaTeX file to be compiled
-        root_file: docs.tex
-        # LaTeX engine to be used
-        compiler: xelatex
-        # Extra arguments to be passed to the latex compiler
-        args: -synctex=1 -interaction=nonstopmode -file-line-error -pdf
-        # Install extra packages by apt-get
-        extra_system_packages: ttf-mscorefonts-installer
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Setup system repositories
+        continue-on-error: true
+        run: |
+          sudo apt update
+          sudo apt upgrade
+      - name: Install fonts
+        continue-on-error: true
+        run: |
+          echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
+          sudo apt install ttf-mscorefonts-installer
+      - name: Setup XeLaTeX
+        continue-on-error: true
+        run: |
+          sudo apt install texlive-xetex
+      - name: Compilation
+        run: xelatex -synctex=1 -interaction=nonstopmode -file-line-error docs.tex
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: docs.pdf
+          path: docs.pdf
