@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+
+    runs-on: ubuntu-18.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Setup system repositories
+        continue-on-error: true
+        run: |
+          sudo apt update
+          sudo apt upgrade
+      - name: Install fonts
+        continue-on-error: true
+        run: |
+          echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
+          sudo apt install ttf-mscorefonts-installer
+      - name: Setup XeLaTeX
+        continue-on-error: true
+        run: |
+          sudo apt install texlive-xetex
+      - name: Compilation
+        run: xelatex -synctex=1 -interaction=nonstopmode -file-line-error docs.tex
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: docs.pdf
+          path: docs.pdf
