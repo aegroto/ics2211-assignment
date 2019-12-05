@@ -23,7 +23,7 @@
 \newcommand{\funcname}[1]{\textit{#1}}
 
 \title{ICS2211 Assignment}
-\author{Lorenzo Catania}
+\author{Lorenzo Catania (Team \#8, life below water)}
 
 \begin{document}
 
@@ -35,6 +35,34 @@
 }
 
 \section{Introduction}
+\subsection{Game concept}
+The presented project is a simil-arcade game called \textbf{Deep Blue}, set in a fictionary submarine world where fishes became so used to the garbage dumped in the ocean that they genetically mutated and started eating it.
+You embody a scuba diver that has to collect as much rubbish as possible while being chased by mutant sea creatures.
 
+\subsection{Game mechanics}
+The game is a side-scroller runner where the world is discovered from left to right, with the camera moving accordingly.
+The player has to collect as much garbage items (represented by cans, plastic bags, plastic bottles etc...) to increase its score.
+Foes are spawned and will start patrolling different areas of the screen. If the player stays for a consistent time close enough to an enemy then it starts chasing and attacking the character. The player has no way to counterattack, its aim is to run away from fishes (they'll disappear completely after falling out of the left side of the camera).
+
+The player must also take care of the oxygen available, that goes down while being underwater and can be recharged going back to the surface level. The oxygen drops faster based on the depth the character is on.
+If the oxygen finishes, the player starts losing health.
+
+It's possible to find some power-ups on the map or into trash items.
+Those are useful to heal, recover oxygen or permanently increase the character's speed to make it easier to run away from enemies.
+
+The environment is procedurally generated, meaning that each game may be potentially infinite. Items, collectables and enemies are spawned randomly on the right and are automatically garbage-collected when falling over the left of the screen.
+The enemies strength grows over time and there's a little chance that an enemy evolves to a more dangerous kind of organism.
+
+\section{Software architecture}
+\subsection{Development environment}
+The game has been developed using Unity3D 2018.4.13f and the game has been tested on both Windows and GNU/Linux operating systems. No specific versioning control software has been used, but it's possible to reconstruct a rough history of the code because each proposed change was packaged into a Unity Package and imported by the rest of the team after it was tested accurately.
+
+\subsection{Components}
+\subsubsection{LevelGenerator}
+The LevelGenerator is responsible for spawning collectables and in general any neutral entity the player can interact with.
+It contains a list of prefabs with the respective probability of spawning and the range of coordinates they can appear into.
+The level generation happens on an area placed on the right side of the camera that's still not visible to the player.
+This area is splitted into tiles of fixed size and it's periodically filled with entities that are then attached to the root node of the scene so they can shift on the left and interact with the current game environment.
+Note that enemies could be spawned by level generator, but they're not in the final version of the game because a more dynamic way of evolving has been preferred. In fact, game objects spawned by level generator are initialized in-place and just deallocated when their cycle of life finishes. This approach doesn't affect performances for simple objects, but may limit the versatility of highly "intelligent" ones like enemies.
 
 \end{document}
