@@ -128,4 +128,50 @@ The approach used to breed enemies is described in details in the next section.
   \caption{Enemies spawner data flow}
 \end{figure}
 
+\section{Artificial Intelligence features}
+\subsection{Enemies behaviour state machine}
+The enemies behaviour is traced by a simple finite state machine that contains two states: \classname{patrolling} and \classname{attack}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\textwidth]{figures/enemy_behaviour_states}
+  \caption{Enemy behaviour state machine}
+\end{figure}
+
+Transitions between those two states are triggered by a single variable \varname{threat}. The threat level increases and decreases based on how far the player is from an enemy and for how much time.
+
+Threating is based on a fuzzy system, defined by the \varname{threat} value itself, \varname{onAlertThreshold} and \varname{attackThreshold}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/threat_graph}
+  \caption{Threatening evaluation graph}
+\end{figure}
+
+As the \varname{threat} value grows, the enemy is first on guard and then starts attacking. When \varname{threat} value goes down, the enemy stops chasing and keeps patrolling again.
+
+Note that if $alertThreshold < threat < attackThreshold$ the enemy's behaviour state doesn't change. While in this level, the enemy keeps doing the same thing it was doing until one of the threshold is hit.
+
+\begin{lstlisting}
+  procedure PatrolBehaviourUpdate():
+    PatrolArea() // Moves randomly around the current position
+
+    if threat > attackThreshold:
+      SetState(Attack)
+\end{lstlisting}
+
+\begin{lstlisting}[language=C]
+  procedure AttackBehaviourUpdate():
+    ChaseEntity(playerObject) // Moves towards the player
+
+    // If close enough to the player, attack him and reduce its HP
+    if CloseTo(playerObject) and attackCooldown == 0: 
+      Attack(playerObject)
+
+    if threat < alertThreshold: 
+      SetState(patrol)
+\end{lstlisting}
+
+
+
 \end{document}
