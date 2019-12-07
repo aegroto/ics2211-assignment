@@ -5,7 +5,8 @@
 \usepackage{listings}
 \usepackage{amsfonts} 
 \usepackage{amssymb}
-\usepackage{longtable}
+\usepackage{placeins}
+\usepackage[dvipsnames]{xcolor}
 
 \usepackage[no-math]{fontspec} 
 \setmainfont{Times New Roman}
@@ -18,26 +19,24 @@
     urlcolor=cyan,
 }
 
- \lstset{
+\definecolor{commentgreen}{rgb}{0.0, 0.5, 0.0}
+
+\lstset{
   language=C,
   basicstyle=\footnotesize\ttfamily,
   numbers=left,           
   numberstyle=\tiny,       
-  numbersep=5pt,        
   tabsize=5,                 
   extendedchars=true,         
   breaklines=true,
-  keywordstyle=\textbf,           
+  commentstyle = \color{commentgreen},
+  keywordstyle=\color{blue}\textbf,           
   stringstyle=\color{white}\ttfamily,
   showspaces=false,       
   showtabs=false,           
-  xleftmargin=17pt,
-  framexleftmargin=17pt,
-  framexrightmargin=5pt,
-  framexbottommargin=4pt,
   showstringspaces=false,
   morekeywords={procedure, if}
- }
+}
 
 \newcommand{\classname}[1]{\textit{\textbf{#1}}}
 \newcommand{\varname}[1]{\underline{\textit{#1}}}
@@ -171,28 +170,47 @@ Threating is based on a fuzzy system, defined by the \varname{threat} value itse
 
 As the \varname{threat} value grows, the enemy is first on guard and then starts attacking. When \varname{threat} value goes down, the enemy stops chasing and keeps patrolling again.
 
-Note that if $alertThreshold < threat < attackThreshold$ the enemy's behaviour state doesn't change. While in this level, the enemy keeps doing the same thing it was doing until one of the threshold is hit.
+Note that if $alertThreshold < threat < attackThreshold$ the enemy's behaviour state doesn't change. While in this level, the enemy keeps active as before until one of the thresholds is hit.
 
-\begin{lstlisting}
-  procedure PatrolBehaviourUpdate():
-    PatrolArea() // Moves randomly around the current position
+\FloatBarrier
 
-    if threat > attackThreshold:
-      SetState(Attack)
-\end{lstlisting}
+\begin{figure}
+  \begin{lstlisting}
+  procedure PatrolB positionehaviourUpdate():
+      // Moves randomly around the current position
+      PatrolArea() 
 
-\begin{lstlisting}[language=C]
-  procedure AttackBehaviourUpdate():
-    ChaseEntity(playerObject) // Moves towards the player
+      if threat > attackThreshold:
+        SetState(Attack)
+  \end{lstlisting}
+  \caption{Enemy patrolling state update pseudocode}
+\end{figure}
 
-    // If close enough to the player, attack him and reduce its HP
-    if CloseTo(playerObject) and attackCooldown == 0: 
-      Attack(playerObject)
+\begin{figure}
+  \begin{lstlisting}
+    procedure AttackBehaviourUpdate():
+      // Moves towards the player
+      ChaseEntity(playerObject) 
 
-    if threat < alertThreshold: 
-      SetState(patrol)
-\end{lstlisting}
+      // If close enough to the player
+      // attack him and reduce its HP
+      if CloseTo(playerObject) and attackCooldown == 0: 
+        Attack(playerObject)
 
+      if threat < alertThreshold: 
+        SetState(patrol)
+  \end{lstlisting}
+  \caption{Enemy attack state update pseudocode}
+\end{figure}
 
+\FloatBarrier
+
+\subsection{Enemy evolution}
+Enemies are supposed to get stronger as the game progresses.
+To obtain that, enemies a fixed number of enemies is instatiated and stored in an object pool before the actual game starts. The enemies in that pool are called \textit{offline} enemies.
+
+During the game, once in a while, an enemy is extracted from the pool and spawned on the game field. Enemies present in the game world are called \textit{online} enemies.
+
+This trick is already useful to improve performances as game objects are never created from scratch, but the most interesting thing is that we can modify the offline enemies without any visible interruption of the gameplay.
 
 \end{document}
