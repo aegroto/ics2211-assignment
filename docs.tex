@@ -4,6 +4,7 @@
 \usepackage{float}
 \usepackage{listings}
 \usepackage{amsfonts} 
+\usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{placeins}
 \usepackage[dvipsnames]{xcolor}
@@ -35,7 +36,7 @@
   showspaces=false,       
   showtabs=false,           
   showstringspaces=false,
-  morekeywords={procedure, if}
+  morekeywords={procedure, foreach, in}
 }
 
 \newcommand{\classname}[1]{\textit{\textbf{#1}}}
@@ -212,5 +213,62 @@ To obtain that, enemies a fixed number of enemies is instatiated and stored in a
 During the game, once in a while, an enemy is extracted from the pool and spawned on the game field. Enemies present in the game world are called \textit{online} enemies.
 
 This trick is already useful to improve performances as game objects are never created from scratch, but the most interesting thing is that we can modify the offline enemies without any visible interruption of the gameplay.
+
+\subsubsection{Stats}
+Each enemy entity has different stats that evolve over time:
+
+\begin{itemize}
+  \item \textbf{Patrol speed} (\textit{patrolSpeed}): Movement speed while patrolling
+  \item \textbf{Patrol zone size} (\textit{patrolZoneSize}): Size of the patrol zone
+  \item \textbf{Patrol threat range} (\textit{patrolThreatRange}): Range from where the enemy is threatened by player's presence
+  \item \textbf{Patrol threat growth} (\textit{patrolThreatGrowth}): The speed at which the threat value grows while patrolling
+  \item \textbf{Patrol threat decay} (\textit{patrolThreatDecay}): The speed at which the threat value decreases while patrolling
+
+  \item \textbf{Chasing speed} (\textit{chasingSpeed}): Movement speed while chasing the player
+  \item \textbf{Attack range} (\textit{attackRange}): The minimum range to attack the player
+  \item \textbf{Maximum chase range} (\textit{maximumChaseRange}): The maximum distance after which the enemy stops chasing the player
+  \item \textbf{Attack damage} (\textit{attackDamage}): Damage dealt to the player after an attack
+  \item \textbf{Maximum attack cooldown} (\textit{maxAttackCooldown}): The cooldown time between two consecutive attacks
+  \item \textbf{Attack threat growth} (\textit{attackThreatGrowth}): The speed at which the threat value grows while attacking
+  \item \textbf{Attack threat decay} (\textit{attackThreatDecay}): The speed at which the threat value decreases while attacking
+\end{itemize}
+
+Those values are considered the \textit{genes} of the enemy as they define how \textit{strong} an enemy is. The \textit{strength} of an enemy is based on part of its stats and is evaluated using this formula:
+
+\begin{gather*}
+  strength(foe) =
+    foe.patrolSpeed + \\
+    foe.patrolZoneSize + \\
+    foe.patrolThreatRange + \\
+    foe.hasingSpeed + \\
+    foe.attackRange + \\
+    foe.maximumChaseRange + \\
+    \frac{foe.attackDamage}{5} + \\
+    \frac{2}{foe.maxAttackCooldown}
+\end{gather*}
+
+\pagebreak
+
+\subsubsection{Breeding}
+The \textit{breeding} phase involves two different enemies and produces a child which stats are the result of taking the best stats of both parents and mixing them together.
+This approach ensures that a child will always be at least as strong as the parents, making the game rapidly more difficult in the progress.
+
+\begin{figure}[H]
+  \begin{lstlisting}
+  procedure Breed(parent1, parent2):
+    child = CreateEmptyEnemy()
+
+    if strength(parent1) > strength(parent2):
+      child.kind = parent1.kind
+    else:
+      child.kind = parent2.kind
+
+    foreach stat_var in child:
+      child.stat_var = max(parent1.stat_var, parent2.stat_var)
+
+    return child 
+  \end{lstlisting}
+  \caption{Breeding procedure pseudocode}
+\end{figure}
 
 \end{document}
