@@ -208,11 +208,11 @@ Note that if $alertThreshold < threat < attackThreshold$ the enemy's behaviour s
 
 \subsection{Enemy evolution}
 Enemies are supposed to get stronger as the game progresses.
-To obtain that, enemies a fixed number of enemies is instatiated and stored in an object pool before the actual game starts. The enemies in that pool are called \textit{offline} enemies.
+To obtain that, enemies a fixed number of enemies with random stats is instatiated \textit{(default = 10)} and stored in an object pool before the actual game starts. The enemies in that pool are called \textit{offline} or resting enemies.
 
-During the game, once in a while, an enemy is extracted from the pool and spawned on the game field. Enemies present in the game world are called \textit{online} enemies.
+During the game, once in a while, an enemy is extracted from the pool and spawned on the game field. Enemies present in the game world are called \textit{online} or spawned enemies. After those enemies are taken out of the game scene they go back to the offline pool.
 
-This trick is already useful to improve performances as game objects are never created from scratch, but the most interesting thing is that we can modify the offline enemies without any visible interruption of the gameplay.
+This trick is already useful to improve performances as game objects are less likely to be created from scratch during the game, but the most interesting thing is that we can modify the offline enemies without any visible interruption of the gameplay.
 
 \subsubsection{Stats}
 Each enemy entity has different stats that evolve over time:
@@ -270,5 +270,68 @@ This approach ensures that a child will always be at least as strong as the pare
   \end{lstlisting}
   \caption{Breeding procedure pseudocode}
 \end{figure}
+
+\subsubsection{Mutations}
+There's always a chance that during breeding the child genes mutate, leading to a totally different result than what's expected.
+When a child mutates, its kind and its genes are generated randomly again instead of being derived from the parents.
+The kind is chosen from all possible kinds, but weaker kinds of foes stop spawning after a while to ensure that while the game progresses new types of enemies are present and that the difficulty doesn't decrease. 
+The genes are initialized randomly like when the initial population is instantiated at the start of the game.
+
+Note that a mutation doesn't assure that the resulting enemy will be stronger or equal to the parents, nor will be of a stronger kind. The trend of the strength of spawned enemies is not monotonic, but tends to grow over time.
+
+\subsubsection{Genetic selection overview}
+The genetic selection step is executed on fixed intervals of time and involves only offline enemies. As it replaces a consistent number of entities it requires the offline pool to be big enough, otherwise the step is skipped.
+
+Enemies present in the pool are sorted by their strength and best worst pairs of enemies are popped out. Best enemies are breed to generate two new children, while worst two are destroyed and replaced with two brand new enemies of the weakest kind possible with randomly generated stats.
+
+\begin{figure}[H]
+  \begin{lstlisting}
+  procedure GeneticSelectionStep():
+    SortByStrength(offlineEnemies)
+
+    topEnemy1 = PopFromTop(offlineEnemies)
+    topEnemy2 = PopFromTop(offlineEnemies)
+
+    worstEnemy1 = PopFromBottom(offlineEnemies)
+    worstEnemy2 = PopFromBottom(offlineEnemies)
+
+    // Breed top enemies
+    // Note that mutations can occur in this phase on both
+    // of the calls of Breed()
+    Push(offlineEnemies, Breed(topEnemy1, topEnemy2))
+    Push(offlineEnemies, Breed(topEnemy2, topEnemy1))
+
+    // Replace worst enemies with new ones
+    Push(offlineEnemies, GenerateNewEnemy())
+    Push(offlineEnemies, GenerateNewEnemy())
+  \end{lstlisting}
+  \caption{Genetic selection step procedure pseudocode}
+\end{figure}
+
+Not all offline enemies are involved in breeding. Some remain in the pool as they are and will be involved in mating/replacing in subsequent steps.
+
+It may be possible to create a bigger pool and use more pairs during genetics election. However, the simple approach shown above requires little computational power and still gives good results in terms of game progression.
+
+\subsubsection{Literature references and further readings}
+
+The enemy behaviour approach was highly inspired by the concepts of \textit{fuzzy logic} developed by Lofti Zadeh (1921-2017) and proposed as an application in its 1973 paper \textit{"Outline of a new approach to the analysis of complex systems and decision processes"} from \textit{IEEE Trans. Systems, Man and Cybernetics, 1973; 3: 28–44}. Although using a single variable doesn't express the full power of fuzzy systems, the results were good enough to not make the enemy behaviour more complex than what it is.
+
+Enemy evolution algorithm is based on the theory of \textit{Genetic algorithms} by John Holland (1929-2015) during the '60s and extensively described in \textit{Adaptation in Natural and Artificial Systems (1975, MIT Press)}, which is considered the killer book on genetic algorithms. As the game theme is about mutations and species evolution, this approach was literally the first that came in mind while planning down the enemies system.
+
+\section{Conclusions}
+\subsection{Team role}
+I've made my part on the game development as a game script programmer,gameplay designer and sound/FX and music composer.
+
+\subsection{Personal contributions}
+I've designed and implemented the camera movement controller, the entities garbage collection and most of all the enemy spawning, evolution and behaviour.
+
+I've partecipated in designing and tuning the level generation and the score system.
+
+I've edited the FX sounds, but none of them was originally created by me.
+
+I've also composed the menu background music, trivially titled \textit{Deep Blue menu song}.
+
+\subsection{Final thoughts}
+I would like to say thanks to everyone that has permitted this beatiful experience, first of all my whole team that worked wonderfully without any stops during the 2 days of the jam. Thanks also to University of Malta and its lecturers for guiding me in its new experience, as well as GDG Malta, MITA and all of the organizers of the event. Thanks to the catering as well, that was pretty good throughout all the weekend.
 
 \end{document}
