@@ -1,0 +1,12 @@
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}
+\contentsline {subsection}{\numberline {1.1}Game concept}{2}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.2}Game mechanics}{2}{subsection.1.2}
+\contentsline {section}{\numberline {2}Software architecture}{3}{section.2}
+\contentsline {subsection}{\numberline {2.1}Development environment}{3}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Components}{3}{subsection.2.2}
+\contentsline {subsubsection}{\numberline {2.2.1}Level generation}{3}{subsubsection.2.2.1}
+\contentsline {subsubsection}{\numberline {2.2.2}Camera movement control}{4}{subsubsection.2.2.2}
+\contentsline {subsubsection}{\numberline {2.2.3}Player control}{5}{subsubsection.2.2.3}
+\contentsline {subsubsection}{\numberline {2.2.4}Entities garbage collection}{6}{subsubsection.2.2.4}
+\contentsline {subsubsection}{\numberline {2.2.5}Game state and UI}{7}{subsubsection.2.2.5}
+\contentsline {subsubsection}{\numberline {2.2.6}Enemies spawning}{7}{subsubsection.2.2.6}
