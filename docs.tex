@@ -44,7 +44,7 @@
 \newcommand{\funcname}[1]{\textit{#1}}
 
 \title{ICS2211 Assignment}
-\author{Lorenzo Catania (Team \#8, life below water)}
+\author{Lorenzo Catania, Malcolm Grech, Francesco Borg Bonello (Team \#8, life below water)}
 
 \begin{document}
 
@@ -131,7 +131,18 @@ A "death wall" object is placed on the left of the screen and it moves following
 In the current version, the game state is given only by the score. A \textit{ScoreManager} is used to take track of its value and to update the score's label on the GUI.
 
 Menus are composed by simple buttons that interact with a \textit{ButtonHandler}, calling different function based on what action must be executed (most of the time they load a different scene).
-In-game user interface is made of icons and sliders or texts that represents the player stats and the current user score. They're updated by controller as well.
+In-game user interface is made of icons and sliders or texts that represents the player stats and the current user score. They're updated by controller as well. A more in-depth analysis on the menu system is contained in the next section.
+
+\subsubsection{Menu interface}
+The game menu had been designed with functions that are global throughout all scenes, such as the ability to go to the settings when pressing escape/ pausing, and initially a single sound track until it was decided to have different sounds per scene. This was done by the player loading into a master scene to load these functions, then strait to their mainMenu scene. 
+With an option of 3 buttons, the player may begin playing, go to the setting scene, were sound may be adjusted, or terminate the program. When pressing ‘Escape’ or ‘Enter’ at any point while in the main menu or in gameplay to load the settings scene, and press one of them again to return to the previous scene, or do so by means of another button. 
+When in the settings scene, the player may adjust the volume of the sound track, and was planned to pause the gameplay should the player have been in gameplay mode. The pause feature however was not successfully implemented entirely.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\textwidth]{figures/menu_system}
+  \caption{Menus data flow}
+\end{figure}
 
 \subsubsection{Enemies spawning}
 Model used to spawn enemies in the game world is unique and tuned specifically for gradually increasing the match difficulty.
@@ -318,11 +329,18 @@ The enemy behaviour approach was highly inspired by the concepts of \textit{fuzz
 
 Enemy evolution algorithm is based on the theory of \textit{Genetic algorithms} by John Holland (1929-2015) during the '60s and extensively described in \textit{Adaptation in Natural and Artificial Systems (1975, MIT Press)}, which is considered the killer book on genetic algorithms. As the game theme is about mutations and species evolution, this approach was literally the first that came in mind while planning down the enemies system.
 
+The level generation algorithm was inspired by the demonstration material from Week 9 of the course.
+
 \section{Conclusions}
 \subsection{Team role}
+\subsubsection{Lorenzo Catania}
 I've made my part on the game development as a game script programmer,gameplay designer and sound/FX and music composer.
 
+\subsubsection{Malcolm Grech}
+My role in the game development was as a mostly as a backend developer with some frontend jobs.
+
 \subsection{Personal contributions}
+\subsubsection{Lorenzo Catania}
 I've designed and implemented the camera movement controller, the entities garbage collection and most of all the enemy spawning, evolution and behaviour.
 
 I've partecipated in designing and tuning the level generation and the score system.
@@ -331,7 +349,17 @@ I've edited the FX sounds, but none of them was originally created by me.
 
 I've also composed the menu background music, trivially titled \textit{Deep Blue menu song}.
 
+\subsubsection{Malcolm Grech}
+My contribution to the game development where:
+Creating the Menu scene Management and button/scroller functionality.
+A part in the creation of the player movement and camera controller.
+Creating the level generation which was fine tuned with other later additions.
+
 \subsection{Final thoughts}
+\subsubsection{Lorenzo Catania}
 I would like to say thanks to everyone that has permitted this beatiful experience, first of all my whole team that worked wonderfully without any stops during the 2 days of the jam. Thanks also to University of Malta and its lecturers for guiding me in its new experience, as well as GDG Malta, MITA and all of the organizers of the event. Thanks to the catering as well, that was pretty good throughout all the weekend.
+
+\subsubsection{Malcolm Grech}
+The experience of my first gameJam was an extremely satisfying and enjoyable one. Having been allocated time to focus on creating a source of entertainment with a team of other capable creators was an honour. My only displeasures where my lack of connecting to my teammates, as my work was on occasion undermined and taken over. Though I had made significant contributions to the game development, I feel like I could have done better, and pushed more till the end as I plan to do in future Jams.
 
 \end{document}
